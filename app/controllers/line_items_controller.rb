@@ -1,26 +1,17 @@
 class LineItemsController < ApplicationController
   before_action :require_user, only: [:index, :show]  
+  before_action :initialize_cart, only: [:create]
 
   def create
-    @user = current_user
-    unless @user.current_cart
-      new_cart = @user.carts.create
-      @user.current_cart = new_cart
-      @user.save
+    item = Item.find(params[:item_id])
+    @line_item = current_user.current_cart.add_item(item.id)
+    respond_to do |format|
+      if @line_item.save
+        format.html { redirect_to cart_path(current_cart),
+        notice: 'Item added to cart!' }
+      else
+        redirect_to store_path
+      end
     end
-    existing_line_item = already_in_cart?
-    if existing_line_item
-      existing_line_item.quantity += 1
-      existing_line_item.save
-    else
-      @user.current_cart.line_items.create(item_id: params[:item_id])
-    end
-    redirect_to cart_path(@user.current_cart)
-  end
-
-  private
-
-  def already_in_cart?
-    @user.current_cart.line_items.where(item_id: params[:item_id])[0]
   end
 end
