@@ -1,5 +1,5 @@
 class CartsController < ApplicationController
-  before_action :require_user, only: [:index, :show]
+  before_action :require_user
   
   def index
     @carts = current_user.carts
@@ -9,20 +9,18 @@ class CartsController < ApplicationController
     @cart = Cart.find(params[:id])
   end
 
+  def checkout
+    @cart = Cart.find(params[:id])
+    @cart.empty_cart
+    @cart.line_items.delete
+    redirect_to cart_path(@cart)
+  end
+
   private
 
   def set_cart
     @cart = current_user.current_cart
     redirect_to store_path if @cart.nil?
-  end
-
-    def add_item(item_id)
-    item = Item.find(item_id)
-    line_item = line_items.detect {|li| li.item == item}
-    line_item ||= LineItem.new
-    line_item.cart = self
-    line_item.item = item
-    line_item
   end
 
 end

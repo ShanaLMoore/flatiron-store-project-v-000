@@ -1,5 +1,5 @@
 class LineItemsController < ApplicationController
-  before_action :require_user, only: [:index, :show]  
+  before_action :require_user  
   before_action :initialize_cart, only: [:create]
 
   def create
