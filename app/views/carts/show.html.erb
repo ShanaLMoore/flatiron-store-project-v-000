@@ -1,4 +1,10 @@
-<h1>Your Cart</h1>
+<% if @cart.status != "submitted" %>
+    <h1>Your Cart:</h1> 
+<% end %>
+
+<% if @cart.status == "submitted" %>
+  <h1>Order Complete!</h1> 
+<% end %>
 
 <% if notice %>
   <p><%= notice %></p> 
