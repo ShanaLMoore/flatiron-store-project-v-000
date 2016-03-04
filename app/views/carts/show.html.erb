@@ -12,5 +12,8 @@
 
 <p>Order total: <strong><%= "$#{@cart.total.to_f/100}" %> </strong> </p>
 
+<% if @cart.status != "submitted" %>
+  <%= button_to "Checkout", checkout_path(@cart.id) %> <br>
+  <%= button_to 'Continue Shopping', store_path(@current_cart), method: :get %>
+<% end %>
 
-  <%= button_to "Checkout", checkout_path(@cart.id) %>

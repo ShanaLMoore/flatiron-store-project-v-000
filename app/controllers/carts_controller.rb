@@ -11,8 +11,10 @@ class CartsController < ApplicationController
 
   def checkout
     @cart = Cart.find(params[:id])
-    @cart.empty_cart
-    @cart.line_items.delete
+    @cart.checkout
+    current_user.current_cart=nil
+    @cart.save
+    @current_user.save
     redirect_to cart_path(@cart)
   end
 

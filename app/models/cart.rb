@@ -17,12 +17,8 @@ class Cart < ActiveRecord::Base
       line_item
   end
 
-  def empty_cart
-    self.line_items.each do |line|
-      line.item.inventory -= line.quantity
-      line.item.save
-    end
-    self.line_items.clear
+  def checkout
+    self.status = "submitted"
   end
 
 end
